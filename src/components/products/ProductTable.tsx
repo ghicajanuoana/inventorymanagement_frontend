@@ -15,12 +15,15 @@ interface ProductTableProps {
         quantity: number,
         reason: string
     ) => Promise<void>;
+
+    deleteProduct: (productId: number) => Promise<void>;
 }
 
 function ProductTable({
     products,
     addStock,
     removeStock,
+    deleteProduct,
 }: ProductTableProps) {
     return (
         <table className="products-table">
@@ -42,6 +45,7 @@ function ProductTable({
                         product={product}
                         addStock={addStock}
                         removeStock={removeStock}
+                        deleteProduct={deleteProduct}
                     />
                 ))}
             </tbody>

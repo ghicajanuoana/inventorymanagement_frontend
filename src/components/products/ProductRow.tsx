@@ -18,12 +18,15 @@ interface ProductRowProps {
         quantity: number,
         reason: string
     ) => Promise<void>;
+
+    deleteProduct: (productId: number) => Promise<void>;
 }
 
 function ProductRow({
     product,
     addStock,
     removeStock,
+    deleteProduct,
 }: ProductRowProps) {
     const [isManageStockOpen, setIsManageStockOpen] =
         useState(false);
@@ -31,13 +34,19 @@ function ProductRow({
     const [showHistory, setShowHistory] =
         useState(false);
 
+    const isLowStock = product.quantity <= product.minimumStock;
+    const isOutOfStock = product.quantity === 0;
+
     return (
         <>
             <tr>
                 <td>{product.sku}</td>
                 <td>{product.name}</td>
                 <td>{product.price}</td>
-                <td>{product.quantity}</td>
+                <td>{product.quantity}
+                    {isOutOfStock ? (<span className="stock-flag out-of-stock">Out of stock</span>) : 
+                    isLowStock ? (<span className="stock-flag low-stock">Low stock</span>) : null}
+                </td>
                 <td>{product.minimumStock}</td>
 
                 <td>
@@ -52,6 +61,13 @@ function ProductRow({
                         {isManageStockOpen
                             ? "Close Stock Management"
                             : "Manage Stock"}
+                    </button>
+
+                    <button
+                            type="button"
+                            onClick={() => deleteProduct(product.id)}
+                        >
+                            Delete Product
                     </button>
                 </td>
             </tr>

@@ -5,6 +5,7 @@ import {
     addStock as addStockApi,
     createProduct,
     getAllProducts,
+    removeProduct,
     removeStock as removeStockApi,
 } from "../api/productApi";
 import ProductTable from "../components/products/ProductTable";
@@ -57,12 +58,29 @@ function ProductsPage() {
       }
     } 
 
+    const deleteProduct = async (productId: number) => {
+        const confirmed = window.confirm(
+            "Are you sure you want to delete this product?"
+        );
+
+        if (!confirmed) {
+            return;
+        }
+
+        try {
+            await removeProduct(productId);
+            await getAllProducts();
+        } catch (error) {
+            console.error("Failed to delete product", error);
+        }
+    };
+
 
     async function handleAddStock(
     productId: number,
     quantity: number,
     reason: string
-): Promise<void> {
+    ): Promise<void> {
     try {
         setErrorMessage("");
 
@@ -127,6 +145,7 @@ async function handleRemoveStock(
                 products={products}
                 addStock={handleAddStock}
                 removeStock={handleRemoveStock}
+                deleteProduct={deleteProduct}
             />
         </section>
     );

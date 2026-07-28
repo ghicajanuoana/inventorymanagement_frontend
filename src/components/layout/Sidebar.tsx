@@ -45,6 +45,13 @@ function Sidebar() {
             >
                 Logout
             </button>
+
+            <button
+                type="button"
+                onClick={() => navigate("/change-password")}
+            >
+                Change password
+            </button>
         </aside>
     );
 }
