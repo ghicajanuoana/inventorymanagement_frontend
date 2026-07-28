@@ -38,6 +38,10 @@ export async function addStock(
     return response.data;
 }
 
+export async function removeProduct(productId: number): Promise<void> {
+    await axiosInstance.delete(`/api/products/${productId}`);
+}
+
 export async function removeStock(
     productId: number,
     quantity: number,

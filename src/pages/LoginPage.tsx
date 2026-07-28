@@ -1,5 +1,6 @@
 import { useLocation } from "react-router-dom";
 import LoginForm from "../components/auth/LoginForm";
+import { useNavigate } from "react-router-dom";
 
 interface LoginLocationState {
     message?: string;
@@ -11,6 +12,8 @@ function LoginPage() {
     const state =
         location.state as LoginLocationState | null;
 
+    const navigate = useNavigate();
+    
     return (
         <main>
             <section>
@@ -22,6 +25,12 @@ function LoginPage() {
                 )}
 
                 <LoginForm />
+                <button
+                    type="button"
+                    onClick={() => navigate("/forgot-password")}
+                >
+                Forgot password?
+                </button>
             </section>
         </main>
     );

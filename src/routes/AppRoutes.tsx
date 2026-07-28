@@ -14,6 +14,9 @@ import SalesOrdersPage from "../pages/SalesOrdersPage";
 
 import ProtectedRoute from "../components/common/ProtectedRoute";
 import AppLayout from "../components/layout/AppLayout";
+import ForgotPasswordPage from "../pages/ForgotPasswordPage";
+import ConfirmForgotPasswordPage from "../pages/ConfirmForgotPasswordPage";
+import ChangePasswordPage from "../pages/ChangePasswordPage";
 
 function AppRoutes() {
     return (
@@ -69,6 +72,20 @@ function AppRoutes() {
                         replace
                     />
                 }
+            />
+
+            <Route
+                path="/forgot-password"
+                element={<ForgotPasswordPage />}
+            />
+            <Route
+                path="/forgot-password/confirm"
+                element={<ConfirmForgotPasswordPage />}
+            />
+
+            <Route
+                path="/change-password"
+                element={<ChangePasswordPage />}
             />
         </Routes>
     );
