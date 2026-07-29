@@ -12,7 +12,7 @@ function LoginForm() {
     const navigate = useNavigate();
 
     async function handleSubmit(
-        event: React.FormEvent<HTMLFormElement>
+        event: React.SubmitEvent<HTMLFormElement>
     ) {
         event.preventDefault();
 
