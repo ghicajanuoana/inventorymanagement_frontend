@@ -1,56 +1,51 @@
+import {
+    Card,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Typography
+} from "@mui/material";
 import ProductRow from "./ProductRow";
 import type { Product } from "../../types/product";
 
 interface ProductTableProps {
     products: Product[];
-
-    addStock: (
-        productId: number,
-        quantity: number,
-        reason: string
-    ) => Promise<void>;
-
-    removeStock: (
-        productId: number,
-        quantity: number,
-        reason: string
-    ) => Promise<void>;
-
-    deleteProduct: (productId: number) => Promise<void>;
+    addStock: (productId: number, quantity: number, reason: string) => Promise<void>;
+    removeStock: (productId: number, quantity: number, reason: string) => Promise<void>;
+    archiveProduct: (productId: number) => Promise<void>;
 }
 
-function ProductTable({
-    products,
-    addStock,
-    removeStock,
-    deleteProduct,
-}: ProductTableProps) {
-    return (
-        <table className="products-table">
-            <thead>
-                <tr>
-                    <th>SKU</th>
-                    <th>Name</th>
-                    <th>Price</th>
-                    <th>Quantity</th>
-                    <th>Minimum Stock</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
+export default function ProductTable(props: ProductTableProps) {
+    if (props.products.length === 0) {
+        return (
+            <Card variant="outlined" sx={{ p: 5, textAlign: "center" }}>
+                <Typography color="text.secondary">No active products found.</Typography>
+            </Card>
+        );
+    }
 
-            <tbody>
-                {products.map((product) => (
-                    <ProductRow
-                        key={product.id}
-                        product={product}
-                        addStock={addStock}
-                        removeStock={removeStock}
-                        deleteProduct={deleteProduct}
-                    />
-                ))}
-            </tbody>
-        </table>
+    return (
+        <TableContainer component={Card} variant="outlined">
+            <Table>
+                <TableHead>
+                    <TableRow>
+                        <TableCell>SKU</TableCell>
+                        <TableCell>Product</TableCell>
+                        <TableCell>Price</TableCell>
+                        <TableCell>Quantity</TableCell>
+                        <TableCell>Minimum stock</TableCell>
+                        <TableCell align="right">Actions</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {props.products.map((product) => (
+                        <ProductRow key={product.id} product={product} {...props} />
+                    ))}
+                </TableBody>
+            </Table>
+        </TableContainer>
     );
 }
-
-export default ProductTable;

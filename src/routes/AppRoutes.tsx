@@ -17,6 +17,7 @@ import AppLayout from "../components/layout/AppLayout";
 import ForgotPasswordPage from "../pages/ForgotPasswordPage";
 import ConfirmForgotPasswordPage from "../pages/ConfirmForgotPasswordPage";
 import ChangePasswordPage from "../pages/ChangePasswordPage";
+import CustomersPage from "../pages/CustomersPage";
 
 function AppRoutes() {
     return (
@@ -54,6 +55,11 @@ function AppRoutes() {
                 />
 
                 <Route
+                    path="/customers"
+                    element={<CustomersPage />}
+                />
+
+                <Route
                     path="/purchase-orders"
                     element={<PurchaseOrdersPage />}
                 />
@@ -61,6 +67,11 @@ function AppRoutes() {
                 <Route
                     path="/sales-orders"
                     element={<SalesOrdersPage />}
+                />
+
+                <Route
+                    path="/change-password"
+                    element={<ChangePasswordPage />}
                 />
             </Route>
 
@@ -83,10 +94,6 @@ function AppRoutes() {
                 element={<ConfirmForgotPasswordPage />}
             />
 
-            <Route
-                path="/change-password"
-                element={<ChangePasswordPage />}
-            />
         </Routes>
     );
 }

@@ -1,22 +1,26 @@
 import { useEffect, useState } from "react";
-import "../styles/products.css";
+import { Alert, Box, CircularProgress } from "@mui/material";
 
 import {
     addStock as addStockApi,
     createProduct,
     getAllProducts,
-    removeProduct,
+    archiveProduct as archiveProductApi,
     removeStock as removeStockApi,
 } from "../api/productApi";
 import ProductTable from "../components/products/ProductTable";
 import type { Product, ProductRequest } from "../types/product";
 import ProductForm from "../components/products/ProductForm";
+import Page from "../components/common/Page";
+import { getRole } from "../utils/tokenStorage";
 
 
 function ProductsPage() {
     const [products, setProducts] = useState<Product[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [errorMessage, setErrorMessage] = useState("");
+    const role = getRole()?.replace(/^ROLE_/i, "").toUpperCase();
+    const isAdmin = role === "ADMIN";
 
     useEffect(() => {
         async function loadProducts() {
@@ -37,14 +41,6 @@ function ProductsPage() {
         loadProducts();
     }, []);
 
-    if (isLoading) {
-        return <p>Loading products...</p>;
-    }
-
-    if (errorMessage) {
-        return <p>{errorMessage}</p>;
-    }
-
     async function addProduct(product: ProductRequest): Promise<void> {
     try {
         const createdProduct = await createProduct(product);
@@ -58,9 +54,11 @@ function ProductsPage() {
       }
     } 
 
-    const deleteProduct = async (productId: number) => {
+    async function archiveProduct(
+        productId: number
+    ): Promise<void> {
         const confirmed = window.confirm(
-            "Are you sure you want to delete this product?"
+            "Are you sure you want to archive this product?"
         );
 
         if (!confirmed) {
@@ -68,13 +66,19 @@ function ProductsPage() {
         }
 
         try {
-            await removeProduct(productId);
-            await getAllProducts();
-        } catch (error) {
-            console.error("Failed to delete product", error);
-        }
-    };
+            setErrorMessage("");
 
+            await archiveProductApi(productId);
+
+            setProducts((currentProducts) =>
+                currentProducts.filter(
+                    (product) => product.id !== productId
+                )
+            );
+        } catch {
+            setErrorMessage("Could not archive product.");
+        }
+    }
 
     async function handleAddStock(
     productId: number,
@@ -132,22 +136,31 @@ async function handleRemoveStock(
 }
 
     return (
-        <section>
-            <h1>Products</h1>
-
+        <Page
+            title="Products"
+            description="Create products, monitor availability, and record stock movements."
+        >
             {errorMessage && (
-               <p>{errorMessage}</p>
-           )}
-
-            <ProductForm addProduct={addProduct} />
-
-            <ProductTable
-                products={products}
-                addStock={handleAddStock}
-                removeStock={handleRemoveStock}
-                deleteProduct={deleteProduct}
-            />
-        </section>
+                <Alert severity="error">{errorMessage}</Alert>
+            )}
+            {isLoading ? (
+                <Box sx={{ display: "grid", placeItems: "center", py: 12 }}>
+                    <CircularProgress />
+                </Box>
+            ) : (
+                <>
+                    {isAdmin && (
+                        <ProductForm addProduct={addProduct} />
+                    )}
+                    <ProductTable
+                        products={products}
+                        archiveProduct={archiveProduct}
+                        addStock={handleAddStock}
+                        removeStock={handleRemoveStock}
+                    />
+                </>
+            )}
+        </Page>
     );
 }
 

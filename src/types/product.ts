@@ -8,6 +8,7 @@ export interface Product {
     price: number;
     categoryId: number;
     supplierId: number;
+    archived: boolean;
 }
 
 // ProductDTO is used for sending data to the backend when creating or updating a product

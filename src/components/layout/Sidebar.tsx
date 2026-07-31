@@ -1,8 +1,48 @@
-import { NavLink, useNavigate } from "react-router-dom";
+import {
+    Box,
+    Button,
+    Divider,
+    List,
+    ListItemButton,
+    ListItemIcon,
+    ListItemText,
+    Stack,
+    Typography
+} from "@mui/material";
+import DashboardRoundedIcon from "@mui/icons-material/DashboardRounded";
+import Inventory2RoundedIcon from "@mui/icons-material/Inventory2Rounded";
+import CategoryRoundedIcon from "@mui/icons-material/CategoryRounded";
+import LocalShippingRoundedIcon from "@mui/icons-material/LocalShippingRounded";
+import ShoppingCartRoundedIcon from "@mui/icons-material/ShoppingCartRounded";
+import ReceiptLongRoundedIcon from "@mui/icons-material/ReceiptLongRounded";
+import PeopleRoundedIcon from "@mui/icons-material/PeopleRounded";
+import LockResetRoundedIcon from "@mui/icons-material/LockResetRounded";
+import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
+import { useLocation, useNavigate } from "react-router-dom";
 import { removeToken } from "../../utils/tokenStorage";
 
-function Sidebar() {
+interface SidebarProps {
+    onNavigate?: () => void;
+}
+
+const navigation = [
+    { label: "Dashboard", path: "/dashboard", icon: <DashboardRoundedIcon /> },
+    { label: "Products", path: "/products", icon: <Inventory2RoundedIcon /> },
+    { label: "Categories", path: "/categories", icon: <CategoryRoundedIcon /> },
+    { label: "Suppliers", path: "/suppliers", icon: <LocalShippingRoundedIcon /> },
+    { label: "Customers", path: "/customers", icon: <PeopleRoundedIcon /> },
+    { label: "Purchase Orders", path: "/purchase-orders", icon: <ShoppingCartRoundedIcon /> },
+    { label: "Sales Orders", path: "/sales-orders", icon: <ReceiptLongRoundedIcon /> }
+];
+
+export default function Sidebar({ onNavigate }: SidebarProps) {
     const navigate = useNavigate();
+    const location = useLocation();
+
+    function goTo(path: string) {
+        navigate(path);
+        onNavigate?.();
+    }
 
     function handleLogout() {
         removeToken();
@@ -10,50 +50,60 @@ function Sidebar() {
     }
 
     return (
-        <aside>
-            <h2>Inventory Management</h2>
+        <Stack sx={{ height: "100%", p: 2 }}>
+            <Stack direction="row" spacing={1.5} sx={{ alignItems: "center", px: 1, py: 1.5 }}>
+                <Box
+                    sx={{
+                        width: 38,
+                        height: 38,
+                        display: "grid",
+                        placeItems: "center",
+                        borderRadius: 2,
+                        bgcolor: "primary.main",
+                        color: "common.white"
+                    }}
+                >
+                    <Inventory2RoundedIcon fontSize="small" />
+                </Box>
+                <Box>
+                    <Typography sx={{ fontWeight: 800, lineHeight: 1.15 }}>Inventory</Typography>
+                    <Typography variant="caption" color="text.secondary">Management system</Typography>
+                </Box>
+            </Stack>
 
-            <nav>
-                <NavLink to="/dashboard">
-                    Dashboard
-                </NavLink>
+            <Divider sx={{ my: 1.5 }} />
 
-                <NavLink to="/products">
-                    Products
-                </NavLink>
+            <List sx={{ flex: 1 }}>
+                {navigation.map((item) => (
+                    <ListItemButton
+                        key={item.path}
+                        selected={location.pathname === item.path}
+                        onClick={() => goTo(item.path)}
+                        sx={{ borderRadius: 2, mb: 0.5 }}
+                    >
+                        <ListItemIcon sx={{ minWidth: 40 }}>{item.icon}</ListItemIcon>
+                        <ListItemText primary={item.label} />
+                    </ListItemButton>
+                ))}
+            </List>
 
-                <NavLink to="/categories">
-                    Categories
-                </NavLink>
-
-                <NavLink to="/suppliers">
-                    Suppliers
-                </NavLink>
-
-                <NavLink to="/purchase-orders">
-                    Purchase Orders
-                </NavLink>
-
-                <NavLink to="/sales-orders">
-                    Sales Orders
-                </NavLink>
-            </nav>
-
-            <button
-                type="button"
-                onClick={handleLogout}
-            >
-                Logout
-            </button>
-
-            <button
-                type="button"
-                onClick={() => navigate("/change-password")}
+            <Divider sx={{ mb: 1.5 }} />
+            <Button
+                color="inherit"
+                startIcon={<LockResetRoundedIcon />}
+                onClick={() => goTo("/change-password")}
+                sx={{ justifyContent: "flex-start", mb: 0.5 }}
             >
                 Change password
-            </button>
-        </aside>
+            </Button>
+            <Button
+                color="error"
+                startIcon={<LogoutRoundedIcon />}
+                onClick={handleLogout}
+                sx={{ justifyContent: "flex-start" }}
+            >
+                Logout
+            </Button>
+        </Stack>
     );
 }
-
-export default Sidebar;
