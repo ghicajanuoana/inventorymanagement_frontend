@@ -16,6 +16,7 @@ import LocalShippingRoundedIcon from "@mui/icons-material/LocalShippingRounded";
 import ShoppingCartRoundedIcon from "@mui/icons-material/ShoppingCartRounded";
 import ReceiptLongRoundedIcon from "@mui/icons-material/ReceiptLongRounded";
 import PeopleRoundedIcon from "@mui/icons-material/PeopleRounded";
+import ReportProblemRoundedIcon from "@mui/icons-material/ReportProblemRounded";
 import LockResetRoundedIcon from "@mui/icons-material/LockResetRounded";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -28,6 +29,7 @@ interface SidebarProps {
 const navigation = [
     { label: "Dashboard", path: "/dashboard", icon: <DashboardRoundedIcon /> },
     { label: "Products", path: "/products", icon: <Inventory2RoundedIcon /> },
+    { label: "Damaged Products", path: "/damaged-products", icon: <ReportProblemRoundedIcon /> },
     { label: "Categories", path: "/categories", icon: <CategoryRoundedIcon /> },
     { label: "Suppliers", path: "/suppliers", icon: <LocalShippingRoundedIcon /> },
     { label: "Customers", path: "/customers", icon: <PeopleRoundedIcon /> },

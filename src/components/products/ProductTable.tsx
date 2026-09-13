@@ -15,6 +15,7 @@ interface ProductTableProps {
     products: Product[];
     addStock: (productId: number, quantity: number, reason: string) => Promise<void>;
     removeStock: (productId: number, quantity: number, reason: string) => Promise<void>;
+    reportDamagedStock: (productId: number, quantity: number, reason: string) => Promise<void>;
     archiveProduct: (productId: number) => Promise<void>;
 }
 
