@@ -15,6 +15,7 @@ import HistoryRoundedIcon from "@mui/icons-material/HistoryRounded";
 import type { Product } from "../../types/product";
 import AddStockForm from "./AddStockForm";
 import RemoveStockForm from "./RemoveStockForm";
+import DamagedStockForm from "./DamagedStockForm";
 import StockHistoryModal from "./StockHistoryModal";
 import { getRole } from "../../utils/tokenStorage";
 
@@ -22,6 +23,7 @@ interface ProductRowProps {
     product: Product;
     addStock: (productId: number, quantity: number, reason: string) => Promise<void>;
     removeStock: (productId: number, quantity: number, reason: string) => Promise<void>;
+    reportDamagedStock: (productId: number, quantity: number, reason: string) => Promise<void>;
     archiveProduct: (productId: number) => Promise<void>;
 }
 
@@ -29,6 +31,7 @@ export default function ProductRow({
     product,
     addStock,
     removeStock,
+    reportDamagedStock,
     archiveProduct
 }: ProductRowProps) {
     const [manageOpen, setManageOpen] = useState(false);
@@ -105,6 +108,12 @@ export default function ProductRow({
                                 <RemoveStockForm
                                     removeStock={(quantity, reason) =>
                                         removeStock(product.id, quantity, reason)
+                                    }
+                                />
+                                <DamagedStockForm
+                                    availableQuantity={product.quantity}
+                                    reportDamagedStock={(quantity, reason) =>
+                                        reportDamagedStock(product.id, quantity, reason)
                                     }
                                 />
                                 <Button

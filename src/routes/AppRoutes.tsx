@@ -18,6 +18,7 @@ import ForgotPasswordPage from "../pages/ForgotPasswordPage";
 import ConfirmForgotPasswordPage from "../pages/ConfirmForgotPasswordPage";
 import ChangePasswordPage from "../pages/ChangePasswordPage";
 import CustomersPage from "../pages/CustomersPage";
+import DamagedProductsPage from "../pages/DamagedProductsPage";
 
 function AppRoutes() {
     return (
@@ -42,6 +43,11 @@ function AppRoutes() {
                 <Route
                     path="/products"
                     element={<ProductsPage />}
+                />
+
+                <Route
+                    path="/damaged-products"
+                    element={<DamagedProductsPage />}
                 />
 
                 <Route

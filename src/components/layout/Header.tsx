@@ -23,7 +23,7 @@ export default function Header({ onMenuClick }: HeaderProps) {
                     <MenuRoundedIcon />
                 </IconButton>
                 <Typography variant="body2" color="text.secondary">
-                    Inventory workspace
+                    
                 </Typography>
             </Toolbar>
         </AppBar>

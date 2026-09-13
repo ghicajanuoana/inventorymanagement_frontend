@@ -64,6 +64,22 @@ export async function removeStock(
     return response.data;
 }
 
+export async function reportDamagedStock(
+    productId: number,
+    quantity: number,
+    reason: string
+): Promise<Product> {
+    const response = await axiosInstance.post<Product>(
+        `/api/products/${productId}/stock/damaged`,
+        {
+            quantity,
+            reason
+        }
+    );
+
+    return response.data;
+}
+
 export async function getStockHistory(
     productId: number
 ): Promise<StockHistory[]> {

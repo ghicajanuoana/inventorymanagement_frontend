@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Alert, Box, CircularProgress } from "@mui/material";
+import axios from "axios";
 
 import {
     addStock as addStockApi,
@@ -7,6 +8,7 @@ import {
     getAllProducts,
     archiveProduct as archiveProductApi,
     removeStock as removeStockApi,
+    reportDamagedStock as reportDamagedStockApi,
 } from "../api/productApi";
 import ProductTable from "../components/products/ProductTable";
 import type { Product, ProductRequest } from "../types/product";
@@ -135,6 +137,33 @@ async function handleRemoveStock(
     }
 }
 
+async function handleReportDamagedStock(
+    productId: number,
+    quantity: number,
+    reason: string
+): Promise<void> {
+    try {
+        setErrorMessage("");
+
+        const updatedProduct = await reportDamagedStockApi(
+            productId,
+            quantity,
+            reason
+        );
+
+        setProducts((currentProducts) =>
+            currentProducts.map((product) =>
+                product.id === productId
+                    ? updatedProduct
+                    : product
+            )
+        );
+    } catch (error) {
+        setErrorMessage(getApiMessage(error, "Could not report damaged stock."));
+        throw error;
+    }
+}
+
     return (
         <Page
             title="Products"
@@ -157,6 +186,7 @@ async function handleRemoveStock(
                         archiveProduct={archiveProduct}
                         addStock={handleAddStock}
                         removeStock={handleRemoveStock}
+                        reportDamagedStock={handleReportDamagedStock}
                     />
                 </>
             )}
@@ -165,3 +195,15 @@ async function handleRemoveStock(
 }
 
 export default ProductsPage;
+
+function getApiMessage(error: unknown, fallback: string): string {
+    if (!axios.isAxiosError(error)) {
+        return fallback;
+    }
+
+    const responseData = error.response?.data as
+        | { message?: string; detail?: string }
+        | undefined;
+
+    return responseData?.message ?? responseData?.detail ?? fallback;
+}
